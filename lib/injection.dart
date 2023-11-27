@@ -5,14 +5,13 @@ import 'package:live_task/view_model/cubit/appointments_cubit.dart';
 
 final getIt = GetIt.instance;
 
-init() {
-  final dio = DioFactory().initDio();
+Future<void> init() async {
+  getIt.registerLazySingleton<DioFactory>(
+    () => DioFactoryImpl(),
+  );
 
-  getIt.registerLazySingleton<DioFactory>(() => dio);
+  getIt.registerLazySingleton<AppointmentsRepo>(
+      () => AppointmentsRepoImpl(getIt()));
 
-  getIt
-      .registerLazySingleton<AppointmentsRepo>(() => AppointmentsRepo(getIt()));
-
-  getIt.registerLazySingleton<AppointmentsCubit>(
-      () => AppointmentsCubit(getIt()));
+  getIt.registerFactory<AppointmentsCubit>(() => AppointmentsCubit(getIt()));
 }

@@ -9,9 +9,14 @@ class AppointmentsCubit extends Cubit<AppointmentsState> {
   AppointmentsRepo appointmentsRepo;
   AppointmentsCubit(this.appointmentsRepo) : super(AppointmentsInitial());
 
+  // get appointments data
 
-  // get appointments data 
-
-
-
+  void getAppointments() async {
+    emit(GetAppointmentsLoading());
+    final result = await appointmentsRepo.getAppointments();
+    result.fold(
+      (l) => emit(GetAppointmentsError(error: l)),
+      (r) => emit(GetAppointmentsSuccess(data: r)),
+    );
+  }
 }
